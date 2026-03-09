@@ -1,42 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Tic Tac Toe</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Tic Tac Toe</title>
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-  <div class="container">
+<div class="container">
 
-    <!-- USER INPUT SECTION -->
-    <div class="input-section">
-      <h1>Enter Players</h1>
+<h1>Tic Tac Toe</h1>
 
-      <input type="text" id="player-1" placeholder="Player 1 Name">
-      <input type="text" id="player-2" placeholder="Player 2 Name">
+<div id="player-inputs">
+<input id="player-1" placeholder="enter name">
+<input id="player-2" placeholder="enter name">
+<button id="submit">Start Game</button>
+</div>
 
-      <button id="submit">Start Game</button>
-    </div>
+<div class="game" style="display:none">
 
-    <!-- GAME SECTION -->
-    <div class="game-section hidden">
-      <h1>Tic Tac Toe</h1>
-      <div class="message"></div>
+<div class="message"></div>
 
-      <div class="board">
-        <div class="cell" id="1"></div>
-        <div class="cell" id="2"></div>
-        <div class="cell" id="3"></div>
-        <div class="cell" id="4"></div>
-        <div class="cell" id="5"></div>
-        <div class="cell" id="6"></div>
-        <div class="cell" id="7"></div>
-        <div class="cell" id="8"></div>
-        <div class="cell" id="9"></div>
-      </div>
-    </div>
+<div class="board">
+<div class="cell" id="1"></div>
+<div class="cell" id="2"></div>
+<div class="cell" id="3"></div>
+<div class="cell" id="4"></div>
+<div class="cell" id="5"></div>
+<div class="cell" id="6"></div>
+<div class="cell" id="7"></div>
+<div class="cell" id="8"></div>
+<div class="cell" id="9"></div>
+</div>
 
-  </div>
+</div>
 
-  <scri
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

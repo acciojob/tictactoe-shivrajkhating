@@ -1,43 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Tic Tac Toe</title>
-<link rel="stylesheet" href="style.css">
-</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
 
+        .container {
+            text-align: center;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            min-width: 320px;
+        }
+
+        /* Setup Screen */
+        .setup-screen input {
+            display: block;
+            margin: 10px auto;
+            padding: 10px;
+            width: 80%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #submit {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Board Screen */
+        .game-screen {
+            display: none;
+        }
+
+        .message {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 5px;
+            margin: 0 auto;
+            width: 310px;
+        }
+
+        .cell {
+            width: 100px;
+            height: 100px;
+            background: #eee;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .cell:hover {
+            background: #e0e0e0;
+        }
+    </style>
+</head>
 <body>
 
 <div class="container">
+    <div id="setup" class="setup-screen">
+        <h1>Tic Tac Toe</h1>
+        <input type="text" id="player-1" placeholder="Player 1 Name">
+        <input type="text" id="player-2" placeholder="Player 2 Name">
+        <button id="submit">Submit</button>
+    </div>
 
-<h1>Tic Tac Toe</h1>
-
-<div id="player-inputs">
-<input id="player-1" placeholder="enter name">
-<input id="player-2" placeholder="enter name">
-<button id="submit">Start Game</button>
+    <div id="game" class="game-screen">
+        <h1>Tic Tac Toe</h1>
+        <div class="message"></div>
+        <div class="board">
+            <div class="cell" id="1"></div>
+            <div class="cell" id="2"></div>
+            <div class="cell" id="3"></div>
+            <div class="cell" id="4"></div>
+            <div class="cell" id="5"></div>
+            <div class="cell" id="6"></div>
+            <div class="cell" id="7"></div>
+            <div class="cell" id="8"></div>
+            <div class="cell" id="9"></div>
+        </div>
+    </div>
 </div>
 
-<div class="game" style="display:none">
+<script>
+    const setupDiv = document.getElementById('setup');
+    const gameDiv = document.getElementById('game');
+    const submitBtn = document.getElementById('submit');
+    const messageDiv = document.querySelector('.message');
+    const cells = document.querySelectorAll('.cell');
 
-<div class="message"></div>
+    let player1, player2;
+    let currentPlayer;
+    let boardState = Array(9).fill(null);
+    let gameActive = true;
 
-<div class="board">
-<div class="cell" id="1"></div>
-<div class="cell" id="2"></div>
-<div class="cell" id="3"></div>
-<div class="cell" id="4"></div>
-<div class="cell" id="5"></div>
-<div class="cell" id="6"></div>
-<div class="cell" id="7"></div>
-<div class="cell" id="8"></div>
-<div class="cell" id="9"></div>
-</div>
+    const winningCombinations = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+        [0, 3, 6], [1, 4, 7], [2, 5, 8], // Cols
+        [0, 4, 8], [2, 4, 6]             // Diagonals
+    ];
 
-</div>
+    submitBtn.addEventListener('click', () => {
+        player1 = document.getElementById('player-1').value || "Player 1";
+        player2 = document.getElementById('player-2').value || "Player 2";
+        
+        if (player1 && player2) {
+            setupDiv.style.display = 'none';
+            gameDiv.style.display = 'block';
+            currentPlayer = player1;
+            updateTurnMessage();
+        }
+    });
 
-</div>
+    function updateTurnMessage() {
+        messageDiv.innerText = `${currentPlayer}, you're up`;
+    }
 
-<script src="script.js"></script>
+    function checkWin() {
+        for (let combo of winningCombinations) {
+            const [a, b, c] = combo;
+            if (boardState[a] && boardState[a] === boardState[b] && boardState[a] === boardState[c]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    cells.forEach((cell, index) => {
+        cell.addEventListener('click', () => {
+            if (!gameActive || boardState[index]) return;
+
+            const mark = (currentPlayer === player1) ? 'x' : 'o';
+            boardState[index] = mark;
+            cell.innerText = mark;
+
+            if (checkWin()) {
+                messageDiv.innerText = `${currentPlayer} congratulations you won!`;
+                gameActive = false;
+            } else if (!boardState.includes(null)) {
+                messageDiv.innerText = "It's a draw!";
+                gameActive = false;
+            } else {
+                currentPlayer = (currentPlayer === player1) ? player2 : player1;
+                updateTurnMessage();
+            }
+        });
+    });
+</script>
+
 </body>
 </html>

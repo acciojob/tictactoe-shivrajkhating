@@ -8,24 +8,14 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  :root {
-    --pink-light: #F8BBD0;
-    --pink-mid:   #F48FB1;
-    --pink-dark:  #E91E8C;
-    --purple:     #7B1FA2;
-    --purple-dark:#4A148C;
-    --ink:        #1a1a1a;
-    --bg:         #fff9fb;
-  }
-
   body {
     min-height: 100vh;
-    background: var(--bg);
+    background: #fff9fb;
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: 'DM Sans', sans-serif;
-    color: var(--ink);
+    color: #1a1a1a;
   }
 
   .container {
@@ -41,19 +31,17 @@
     font-family: 'Permanent Marker', cursive;
     font-size: 2.8rem;
     letter-spacing: 2px;
-    color: var(--ink);
+    color: #1a1a1a;
     margin-bottom: 2.2rem;
     text-align: center;
   }
 
-  /* ── Setup Screen ── */
+  /* Setup Screen */
   #setup {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0;
-    animation: fadeIn .4s ease;
   }
 
   .field {
@@ -69,7 +57,6 @@
     font-size: 15px;
     font-weight: 500;
     min-width: 72px;
-    color: var(--ink);
   }
 
   .field input {
@@ -80,13 +67,11 @@
     padding: 0 14px;
     font-family: 'DM Sans', sans-serif;
     font-size: 15px;
-    color: var(--ink);
-    background: #fff;
     outline: none;
     transition: border-color .2s;
   }
 
-  .field input:focus { border-color: var(--pink-dark); }
+  .field input:focus { border-color: #e91e8c; }
   .field input::placeholder { color: #bbb; }
 
   #submit {
@@ -95,33 +80,30 @@
     font-family: 'DM Sans', sans-serif;
     font-size: 15px;
     font-weight: 500;
-    color: var(--ink);
+    color: #1a1a1a;
     background: #fff;
-    border: 1.5px solid var(--ink);
+    border: 1.5px solid #1a1a1a;
     border-radius: 6px;
     cursor: pointer;
     transition: background .2s, color .2s;
-    letter-spacing: .3px;
   }
 
-  #submit:hover { background: var(--ink); color: #fff; }
+  #submit:hover { background: #1a1a1a; color: #fff; }
 
-  /* ── Game Screen ── */
+  /* Game Screen */
   #game {
     display: none;
     flex-direction: column;
     align-items: center;
     width: 100%;
-    animation: fadeIn .4s ease;
   }
 
   .message {
     font-size: 15px;
     font-weight: 400;
     margin-bottom: 1.4rem;
-    color: var(--ink);
+    color: #1a1a1a;
     min-height: 22px;
-    letter-spacing: .2px;
   }
 
   /* Board */
@@ -135,22 +117,22 @@
   .cell {
     width: 110px;
     height: 110px;
-    background: var(--pink-light);
+    background: #F8BBD0;
     border: 1px solid #333;
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: 'Permanent Marker', cursive;
     font-size: 2.4rem;
-    color: var(--ink);
+    color: #1a1a1a;
     cursor: pointer;
     transition: background .15s;
     user-select: none;
   }
 
-  .cell:hover:not(.taken) { background: var(--pink-mid); }
+  .cell:hover:not(.taken) { background: #F48FB1; }
   .cell.taken { cursor: default; }
-  .cell.win { background: var(--purple); color: #fff; }
+  .cell.win { background: #7B1FA2; color: #fff; }
 
   #play-again {
     margin-top: 1.5rem;
@@ -158,18 +140,16 @@
     font-family: 'DM Sans', sans-serif;
     font-size: 14px;
     font-weight: 500;
-    color: var(--ink);
+    color: #1a1a1a;
     background: #fff;
-    border: 1.5px solid var(--ink);
+    border: 1.5px solid #1a1a1a;
     border-radius: 6px;
     cursor: pointer;
     display: none;
     transition: background .2s, color .2s;
   }
 
-  #play-again:hover { background: var(--ink); color: #fff; }
-
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  #play-again:hover { background: #1a1a1a; color: #fff; }
 </style>
 </head>
 <body>
@@ -177,7 +157,7 @@
 
   <h1>Tic Tac Toe</h1>
 
-  <!-- Setup -->
+  <!-- Setup Screen -->
   <div id="setup">
     <div class="field">
       <label for="player-1">Player 1</label>
@@ -190,7 +170,7 @@
     <button id="submit">Start Game</button>
   </div>
 
-  <!-- Game -->
+  <!-- Game Screen -->
   <div id="game">
     <div class="message" id="message"></div>
     <div id="board">
@@ -210,20 +190,20 @@
 </div>
 
 <script>
-  const WINS = [
-    [1,2,3],[4,5,6],[7,8,9],   // rows
-    [1,4,7],[2,5,8],[3,6,9],   // cols
-    [1,5,9],[3,5,7]            // diags
+  var WINS = [
+    [1,2,3],[4,5,6],[7,8,9],
+    [1,4,7],[2,5,8],[3,6,9],
+    [1,5,9],[3,5,7]
   ];
 
-  let players = ['', ''];
-  let current = 0;
-  let board = {};
-  let gameOver = false;
+  var players = ['', ''];
+  var current = 0;
+  var board = {};
+  var gameOver = false;
 
-  document.getElementById('submit').addEventListener('click', () => {
-    const p1 = document.getElementById('player-1').value.trim() || 'Player 1';
-    const p2 = document.getElementById('player-2').value.trim() || 'Player 2';
+  document.getElementById('submit').addEventListener('click', function() {
+    var p1 = document.getElementById('player-1').value.trim() || 'Player 1';
+    var p2 = document.getElementById('player-2').value.trim() || 'Player 2';
     players = [p1, p2];
     document.getElementById('setup').style.display = 'none';
     document.getElementById('game').style.display = 'flex';
@@ -235,57 +215,56 @@
     current = 0;
     gameOver = false;
     document.getElementById('play-again').style.display = 'none';
-    document.querySelectorAll('.cell').forEach(cell => {
+    document.querySelectorAll('.cell').forEach(function(cell) {
       cell.textContent = '';
       cell.classList.remove('taken', 'win');
     });
-    setMessage(`${players[0]}, you're up`);
+    document.getElementById('message').textContent = players[0] + ", you're up";
   }
 
-  document.querySelectorAll('.cell').forEach(cell => {
-    cell.addEventListener('click', () => {
-      const id = parseInt(cell.id);
+  document.querySelectorAll('.cell').forEach(function(cell) {
+    cell.addEventListener('click', function() {
+      var id = parseInt(cell.id);
       if (gameOver || board[id]) return;
 
-      const mark = current === 0 ? 'x' : 'o';
+      var mark = current === 0 ? 'x' : 'o';
       board[id] = mark;
       cell.textContent = mark;
       cell.classList.add('taken');
 
-      const winLine = checkWin(mark);
+      var winLine = checkWin(mark);
       if (winLine) {
         gameOver = true;
-        winLine.forEach(n => {
+        winLine.forEach(function(n) {
           document.getElementById(String(n)).classList.add('win');
         });
-        setMessage(`${players[current]}, congratulations you won!`);
+        document.getElementById('message').textContent = players[current] + ', congratulations you won!';
         document.getElementById('play-again').style.display = 'inline-block';
         return;
       }
 
       if (Object.keys(board).length === 9) {
         gameOver = true;
-        setMessage("It's a draw!");
+        document.getElementById('message').textContent = "It's a draw!";
         document.getElementById('play-again').style.display = 'inline-block';
         return;
       }
 
       current = 1 - current;
-      setMessage(`${players[current]}, you're up`);
+      document.getElementById('message').textContent = players[current] + ", you're up";
     });
   });
 
   document.getElementById('play-again').addEventListener('click', startGame);
 
   function checkWin(mark) {
-    for (const line of WINS) {
-      if (line.every(n => board[n] === mark)) return line;
+    for (var i = 0; i < WINS.length; i++) {
+      var line = WINS[i];
+      if (line.every(function(n) { return board[n] === mark; })) {
+        return line;
+      }
     }
     return null;
-  }
-
-  function setMessage(msg) {
-    document.getElementById('message').textContent = msg;
   }
 </script>
 </body>
